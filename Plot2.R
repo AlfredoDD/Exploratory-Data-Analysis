@@ -5,7 +5,6 @@
 ############################## Environment Preparation ##############################
 # Load necessary packages
 library("data.table")
-library("dplyr")
 # First, create directory to contain data, and fix relative work environment
 if(!file.exists("Project1")){
     dir.create("Project1")
@@ -13,7 +12,7 @@ if(!file.exists("Project1")){
 setwd("Project1")
 
 ######### Read in zip file #########
-
+######### and extract information to household dataframe #########
 url <- "https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip"
 file <- "household_power_consumption"
 download.file(url, file, method = "curl")
@@ -40,9 +39,10 @@ rm(householdFeb)
 
 for(i in c(3:9)) {household[,i] <- as.numeric(household[,i])}
 
-# We use a variable with date an time
-household$DateTime <- paste(household$Date, household$Time)
-household$DateTime <- strptime(household$DateTime, format="%Y-%m-%d %H:%M:%S")
+## We use a variable with date an time
+
+household$DataHora <- paste(household$Date, household$Time)
+household$DataHora <- strptime(household$DataHora, format="%Y-%m-%d %H:%M:%S")
 
 ######### Plot 2 for the Project1 #########
 ## This plot only have label and marks
@@ -54,7 +54,7 @@ png(filename = "plot2.png", width = 480, height = 480, units = "px", bg = "white
 
 par(mar = c(6, 6, 5, 4))
 
-plot(household$DateTime, household$Global_active_power, xaxt=NULL, xlab = "", ylab = "Global Active Power (kilowatts)", type="n")
-lines(household$DateTime, household$Global_active_power, type="S")
+plot(household$DataHora, household$Global_active_power, xaxt=NULL, xlab = "", ylab = "Global Active Power (kilowatts)", type="n")
+lines(household$DataHora, household$Global_active_power, type="S")
 
 dev.off()
